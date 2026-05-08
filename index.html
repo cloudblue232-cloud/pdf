@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أسرار ميديا باينج</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #F5C518;
+    --dark: #0A0A0F;
+    --darker: #050508;
+    --card-bg: #10101A;
+    --accent: #FF4D4D;
+    --text: #E8E8F0;
+    --muted: #6B6B8A;
+    --border: rgba(245,197,24,0.15);
+  }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+background: var(--darker);
+font-family: Cairo, sans-serif;
+color: var(--text);
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+overflow-x: hidden;
+overflow-y: auto;
+position: relative;
+}
+
+body::before {
+content: "";
+position: fixed;
+inset: 0;
+background:
+radial-gradient(ellipse 60% 40% at 50% 0%, rgba(245,197,24,0.07) 0%, transparent 70%),
+radial-gradient(ellipse 40% 30% at 80% 80%, rgba(255,77,77,0.05) 0%, transparent 60%);
+pointer-events: none;
+}
+
+/* Header */
+.header {
+text-align: center;
+margin-top: 20px;
+margin-bottom: 40px;
+position: relative;
+z-index: 10;
+animation: fadeDown 0.8s ease both;
+}
+
+.header-label {
+font-family: "Tajawal", sans-serif;
+font-size: 11px;
+letter-spacing: 4px;
+color: var(--gold);
+text-transform: uppercase;
+margin-bottom: 10px;
+opacity: 0.8;
+}
+
+.header h1 {
+font-family: "Tajawal", sans-serif;
+font-size: clamp(28px, 3vw, 36px);
+font-weight: 900;
+color: #fff;
+line-height: 1.2;
+}
+
+.header h1 span {
+color: var(--gold);
+position: relative;
+}
+
+.header h1 span::after {
+content: "";
+position: absolute;
+bottom: 2px;
+left: 0; right: 0;
+height: 3px;
+background: var(--gold);
+border-radius: 2px;
+opacity: 0.4;
+}
+
+/* Carousel Wrapper */
+.carousel-wrapper {
+position: relative;
+width: min(480px, 95vw);
+z-index: 10;
+filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.35));
+}
+
+.carousel-track-container {
+overflow: hidden;
+border-radius: 20px;
+border: 1px solid rgba(255, 255, 255, 0.04);
+background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+}
+
+.carousel-track {
+display: flex;
+transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+will-change: transform;
+direction: ltr;
+}
+
+/* Cards */
+.card {
+min-width: 100%;
+background: var(--card-bg);
+border: 1px solid var(--border);
+border-radius: 20px;
+padding: 44px 40px 40px;
+position: relative;
+overflow: hidden;
+direction: rtl;
+}
+
+.card::before {
+content: "";
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 3px;
+background: linear-gradient(90deg, transparent, var(--gold), transparent);
+opacity: 0;
+transition: opacity 0.4s;
+}
+
+.card.active::before { opacity: 1; }
+.card.active {
+box-shadow: inset 0 0 0 1px rgba(245,197,24,0.18);
+}
+
+.card-number {
+position: absolute;
+top: 24px;
+left: 30px;
+font-family: "Tajawal", sans-serif;
+font-size: 11px;
+color: var(--muted);
+letter-spacing: 2px;
+}
+
+.card-tag {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+background: rgba(245,197,24,0.1);
+border: 1px solid rgba(245,197,24,0.2);
+color: var(--gold);
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 1px;
+padding: 5px 12px;
+border-radius: 20px;
+margin-bottom: 20px;
+text-transform: uppercase;
+}
+
+.card-icon {
+font-size: 48px;
+margin-bottom: 18px;
+display: block;
+filter: drop-shadow(0 0 20px rgba(245,197,24,0.3));
+}
+
+.card-title {
+font-family: "Tajawal", sans-serif;
+font-size: clamp(20px, 4vw, 26px);
+font-weight: 900;
+color: #fff;
+margin-bottom: 14px;
+line-height: 1.3;
+}
+
+.card-title .highlight {
+color: var(--gold);
+}
+
+.card-desc {
+font-size: 14px;
+line-height: 1.8;
+color: #9898B8;
+margin-bottom: 24px;
+}
+
+.card-stat {
+background: rgba(255,255,255,0.03);
+border: 1px solid rgba(255,255,255,0.06);
+border-radius: 12px;
+padding: 14px 18px;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.card-stat-icon {
+font-size: 20px;
+}
+
+.card-stat-text {
+font-size: 13px;
+color: var(--muted);
+line-height: 1.5;
+}
+
+.card-stat-text strong {
+color: var(--text);
+display: block;
+font-size: 13px;
+margin-bottom: 2px;
+}
+
+/* Special accent cards */
+.card.accent-red .card-tag {
+background: rgba(255,77,77,0.1);
+border-color: rgba(255,77,77,0.25);
+color: #FF6B6B;
+}
+
+.card.accent-red .card-title .highlight { color: #FF6B6B; }
+.card.accent-red::before { background: linear-gradient(90deg, transparent, #FF4D4D, transparent); }
+
+/* Cover card */
+.card.cover {
+background: linear-gradient(135deg, #10101A 0%, #16161F 100%);
+text-align: center;
+padding: 60px 40px;
+}
+
+.card.cover .card-icon { font-size: 64px; }
+
+.card.cover .card-title {
+font-size: clamp(24px, 5vw, 34px);
+margin-bottom: 16px;
+}
+
+.card.cover .card-desc { font-size: 15px; margin-bottom: 30px; }
+
+.cover-pills {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+justify-content: center;
+}
+
+.pill {
+background: rgba(245,197,24,0.08);
+border: 1px solid rgba(245,197,24,0.15);
+color: var(--gold);
+font-size: 12px;
+padding: 6px 14px;
+border-radius: 20px;
+font-weight: 600;
+}
+
+/* Navigation */
+.nav {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 16px;
+margin-top: 28px;
+padding: 10px 14px;
+border: 1px solid rgba(255,255,255,0.06);
+border-radius: 999px;
+background: rgba(10,10,15,0.6);
+backdrop-filter: blur(8px);
+}
+
+.nav-btn {
+width: 44px;
+height: 44px;
+border-radius: 50%;
+border: 1px solid var(--border);
+background: var(--card-bg);
+color: var(--gold);
+font-size: 18px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: all 0.25s;
+font-weight: 700;
+}
+
+.nav-btn:hover {
+background: rgba(245,197,24,0.12);
+border-color: rgba(245,197,24,0.4);
+transform: scale(1.08);
+}
+
+.nav-btn:active { transform: scale(0.95); }
+.nav-btn:disabled {
+opacity: 0.35;
+cursor: not-allowed;
+transform: none;
+}
+.nav-btn:disabled:hover {
+background: var(--card-bg);
+border-color: var(--border);
+}
+
+.dots {
+display: flex;
+gap: 6px;
+align-items: center;
+}
+
+.dot {
+width: 6px;
+height: 6px;
+border-radius: 3px;
+background: var(--muted);
+cursor: pointer;
+transition: all 0.3s;
+}
+
+.dot.active {
+background: var(--gold);
+width: 22px;
+}
+
+/* Progress bar */
+.progress-bar {
+position: absolute;
+bottom: 0; left: 0;
+height: 2px;
+background: var(--gold);
+transition: width 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+border-radius: 0 2px 2px 0;
+opacity: 0.6;
+}
+
+@keyframes fadeDown {
+from { opacity: 0; transform: translateY(-20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Decorative corner */
+.corner-decor {
+position: absolute;
+bottom: 20px;
+left: 24px;
+font-size: 60px;
+opacity: 0.04;
+font-weight: 900;
+font-family: "Tajawal", sans-serif;
+line-height: 1;
+user-select: none;
+pointer-events: none;
+}
+
+/* Swipe hint */
+.swipe-hint {
+text-align: center;
+margin-top: 16px;
+font-size: 11px;
+color: var(--muted);
+letter-spacing: 1px;
+opacity: 0.6;
+}
+
+.carousel-track-container:active {
+cursor: grabbing;
+}
+
+@media (max-width: 640px) {
+  body {
+    justify-content: flex-start;
+    padding: 22px 0;
+  }
+
+  .header {
+    margin-bottom: 24px;
+    padding: 0 14px;
+  }
+
+  .carousel-wrapper {
+    width: min(480px, 96vw);
+  }
+
+  .card {
+    padding: 36px 20px 28px;
+  }
+
+  .card-number {
+    top: 18px;
+    left: 18px;
+  }
+
+  .nav {
+    gap: 10px;
+    margin-top: 20px;
+    padding: 8px 10px;
+  }
+
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">⚡ خبرات مش هتلاقيها في أي كورس</div>
+  <h1>أسرار <span>ميديا باينج</span><br>اللي محدش بيقولهالك</h1>
+</div>
+
+<div class="carousel-wrapper">
+  <div class="carousel-track-container">
+    <div class="carousel-track" id="track">
+
+  <!-- Card 0: Cover -->
+  <div class="card cover active">
+    <div class="card-number">00 / 07</div>
+    <span class="card-icon">🧠</span>
+    <h2 class="card-title">الأسرار اللي بتفرق بين <span class="highlight">المحترف والمبتدئ</span></h2>
+    <p class="card-desc">مش كل اللي بيشتغل ميديا باينج عارف الحاجات دي... وده بالظبط اللي بيخلي الفرق في النتائج</p>
+    <div class="cover-pills">
+      <span class="pill">CPM Tricks</span>
+      <span class="pill">Ad Fatigue</span>
+      <span class="pill">Bidding Secrets</span>
+      <span class="pill">Attribution</span>
+      <span class="pill">Testing</span>
+    </div>
+    <div class="corner-decor">MB</div>
+    <div class="progress-bar" id="progress" style="width: 14.28%"></div>
+  </div>
+
+  <!-- Card 1 -->
+  <div class="card">
+    <div class="card-number">01 / 07</div>
+    <div class="card-tag">🎯 Bidding</div>
+    <span class="card-icon">💰</span>
+    <h2 class="card-title">الـ <span class="highlight">Auction</span> مش بيبيع للأرخص</h2>
+    <p class="card-desc">الناس فاكرة إن اللي بيدفع أقل CPM بيكسب. الحقيقة إن Facebook بيبيع للإعلان الأكثر <strong style="color:#fff">قيمة للمستخدم</strong>، مش الأغلى ولا الأرخص.</p>
+    <div class="card-stat">
+      <span class="card-stat-icon">⚡</span>
+      <div class="card-stat-text">
+        <strong>السر العملي</strong>
+        CTR عالي + Relevance Score عالي = CPM أقل بكتير من منافسك حتى لو بيدفع أكتر
+      </div>
+    </div>
+    <div class="corner-decor">01</div>
+    <div class="progress-bar" style="width: 28.57%"></div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card">
+    <div class="card-number">02 / 07</div>
+    <div class="card-tag">🔥 Ad Fatigue</div>
+    <span class="card-icon">😴</span>
+    <h2 class="card-title">الإعلان <span class="highlight">بيتعب</span> قبل ما تحس بيه</h2>
+    <p class="card-desc">الـ Frequency بتوصل لـ 3+ وانت لسه شايف performance كويس؟ الجمهور بيشوف الإعلان وبيتجاهله، لكن الـ Algorithm لسه بيصرف من ميزانيتك.</p>
+    <div class="card-stat">
+      <span class="card-stat-icon">📊</span>
+      <div class="card-stat-text">
+        <strong>متابعش CPM بس</strong>
+        راقب Thumb Stop Ratio + Hook Rate عشان تعرف الإعلان بدأ يتعب قبل ما الأرقام تنهار
+      </div>
+    </div>
+    <div class="corner-decor">02</div>
+    <div class="progress-bar" style="width: 42.85%"></div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card accent-red">
+    <div class="card-number">03 / 07</div>
+    <div class="card-tag">⚠️ Attribution</div>
+    <span class="card-icon">👁️</span>
+    <h2 class="card-title">الـ <span class="highlight">Last Click</span> بيكدب عليك</h2>
+    <p class="card-desc">لو بتحكم على إعلاناتك بالـ Last Click Attribution، انت بتقتل أفضل إعلاناتك. إعلانات الـ TOF بتأثر على القرار بس مش بتاخد الـ Credit.</p>
+    <div class="card-stat">
+      <span class="card-stat-icon">🔍</span>
+      <div class="card-stat-text">
+        <strong>الحل الاحترافي</strong>
+        استخدم View-Through + 7-day click window وشوف الفرق في قراراتك
+      </div>
+    </div>
+    <div class="corner-decor">03</div>
+    <div class="progress-bar" style="width: 57.14%"></div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="card">
+    <div class="card-number">04 / 07</div>
+    <div class="card-tag">🧪 Testing</div>
+    <span class="card-icon">⚗️</span>
+    <h2 class="card-title">الـ A/B Test<span class="highlight"> اللي بتعمله غلط</span></h2>
+    <p class="card-desc">تبدل صورة وتقول عملت A/B Test؟ لا. الـ A/B Test الصح بيختبر <strong style="color:#fff">variable واحدة بس</strong> وبيستنى statistical significance حقيقي قبل ما يحكم.</p>
+    <div class="card-stat">
+      <span class="card-stat-icon">✅</span>
+      <div class="card-stat-text">
+        <strong>القاعدة الذهبية</strong>
+        محتاج على الأقل 100 conversion لكل variant قبل ما تحكم على النتيجة
+      </div>
+    </div>
+    <div class="corner-decor">04</div>
+    <div class="progress-bar" style="width: 71.42%"></div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="card">
+    <div class="card-number">05 / 07</div>
+    <div class="card-tag">🎨 Creative</div>
+    <span class="card-icon">🎬</span>
+    <h2 class="card-title">الـ Creative هو <span class="highlight">Targeting الجديد</span></h2>
+    <p class="card-desc">من بعد iOS 14، الـ Targeting ضعف. الناس اللي لسه بتركز على Audience Segmentation بتخسر. الـ Creative هو اللي بيجيب الجمهور الصح دلوقتي.</p>
+    <div class="card-stat">
+      <span class="card-stat-icon">🚀</span>
+      <div class="card-stat-text">
+        <strong>الاستراتيجية الصح</strong>
+        Broad Audience + Creative قوي = أوفر وأذكى من Narrow Targeting + Creative متوسط
+      </div>
+    </div>
+    <div class="corner-decor">05</div>
+    <div class="progress-bar" style="width: 85.71%"></div>
+  </div>
+
+  <!-- Card 6: Outro -->
+  <div class="card cover">
+    <div class="card-number">06 / 07</div>
+    <span class="card-icon">🏆</span>
+    <h2 class="card-title">الفرق بين اللي بيشتغل و<span class="highlight">اللي بيتعلم بس</span></h2>
+    <p class="card-desc">المعرفة من غير تطبيق = صفر. خد واحدة من الأسرار دي وجربها النهارده على حملاتك.</p>
+    <div class="cover-pills">
+      <span class="pill">طبّق</span>
+      <span class="pill">اختبر</span>
+      <span class="pill">قِس النتائج</span>
+      <span class="pill">كرر</span>
+    </div>
+    <div style="margin-top:24px; padding:16px; background:rgba(245,197,24,0.07); border:1px solid rgba(245,197,24,0.15); border-radius:12px; font-size:13px; color:#9898B8; line-height:1.7;">
+      💡 <strong style="color:#fff">عايز تعرف أكتر؟</strong><br>
+      تابع عشان تعرف باقي الأسرار اللي بتفرق في الأرقام الحقيقية
+    </div>
+    <div class="corner-decor">✓</div>
+    <div class="progress-bar" style="width: 100%"></div>
+  </div>
+
+</div>
+  </div>
+
+  <!-- Navigation -->
+
+  <div class="nav">
+    <button class="nav-btn" id="prevBtn" type="button" aria-label="السابق" onclick="move(-1)">→</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn" id="nextBtn" type="button" aria-label="التالي" onclick="move(1)">←</button>
+  </div>
+
+  <div class="swipe-hint">اسحب يميناً أو شمالاً للتنقل</div>
+</div>
+
+<script>
+  const track = document.getElementById('track');
+  const cards = Array.from(track.children);
+  const dotsContainer = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  let current = 0;
+  let startX = 0;
+  let isDragging = false;
+
+  // Build dots
+  cards.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsContainer.appendChild(d);
+  });
+
+  function goTo(index) {
+    cards[current].classList.remove('active');
+    current = Math.max(0, Math.min(index, cards.length - 1));
+    cards[current].classList.add('active');
+    track.style.transform = `translateX(-${current * 100}%)`;
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === cards.length - 1;
+  }
+
+  function move(dir) { goTo(current + dir); }
+
+  // Touch/mouse swipe
+  const container = document.querySelector('.carousel-track-container');
+  container.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+  container.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) move(diff > 0 ? 1 : -1);
+  });
+  container.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; });
+  container.addEventListener('mouseleave', () => { isDragging = false; });
+  container.addEventListener('mouseup', e => {
+    if (!isDragging) return;
+    isDragging = false;
+    const diff = startX - e.clientX;
+    if (Math.abs(diff) > 40) move(diff > 0 ? 1 : -1);
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') move(1);
+    if (e.key === 'ArrowRight') move(-1);
+  });
+
+  goTo(0);
+</script>
+
+</body>
+</html>
